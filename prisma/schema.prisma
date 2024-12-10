@@ -33,3 +33,65 @@ model Session {
 
   @@index([userId])
 }
+
+model Expense {
+  id         Int             @id @default(autoincrement())
+  categoryId Int
+  category   ExpenseCategory @relation(fields: [categoryId], references: [id])
+  amount     Float
+  weekStart  DateTime // Start of the week for this expense
+  month      Month           @relation(fields: [monthId], references: [id])
+  monthId    Int
+  createdAt  DateTime        @default(now())
+}
+
+model ExpenseCategory {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique // e.g., "suppliers", "rent", "salaries"
+  expenses Expense[]
+}
+
+model Sale {
+  id        Int      @id @default(autoincrement())
+  type      String // e.g., "cash", "card", "transfer", "current account"
+  amount    Float
+  clientId  Int? // Optional; null for regular sales
+  client    Client?  @relation(fields: [clientId], references: [id])
+  month     Month    @relation(fields: [monthId], references: [id])
+  monthId   Int
+  createdAt DateTime @default(now())
+}
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  name      String // Client name
+  discount  Float // Discount percentage, e.g., 0.1 for 10%
+  sales     Sale[]
+  createdAt DateTime @default(now())
+}
+
+model Stock {
+  id        Int       @id @default(autoincrement())
+  typeId    Int
+  type      StockType @relation(fields: [typeId], references: [id])
+  quantity  Float
+  costValue Float
+  month     Month     @relation(fields: [monthId], references: [id])
+  monthId   Int
+  createdAt DateTime  @default(now())
+}
+
+model StockType {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique // e.g., "beef", "pork", "chicken"
+  stocks Stock[]
+}
+
+model Month {
+  id        Int       @id @default(autoincrement())
+  startDate DateTime  @unique() // The first date of the month
+  expenses  Expense[]
+  sales     Sale[]
+  stocks    Stock[]
+  createdAt DateTime  @default(now())
+}
