@@ -1,7 +1,7 @@
 import { prisma } from "~/utils/db.server";
 import type { Route } from "./+types/client";
 import { requireUserId } from "~/utils/auth.server";
-import { useLoaderData } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import { redirectBack } from "remix-utils/redirect-back";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -35,7 +35,15 @@ export default function Client() {
 
   return (
     <div>
-      <h1>{client.name}</h1>
+      <div className="flex justify-between gap-4">
+        <h1>{client.name}</h1>
+        <Link
+          to="edit"
+          className="bg-gray-100 hover:bg-gray-50 rounded px-2 py-1 text-black"
+        >
+          Editar
+        </Link>
+      </div>
       <table className="mt-6 w-full whitespace-nowrap text-left">
         <colgroup>
           <col className="w-full sm:w-4/12" />
