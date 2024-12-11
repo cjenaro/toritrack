@@ -35,14 +35,13 @@ model Session {
 }
 
 model Expense {
-  id         Int             @id @default(autoincrement())
-  categoryId Int
-  category   ExpenseCategory @relation(fields: [categoryId], references: [id])
-  amount     Float
-  weekStart  DateTime // Start of the week for this expense
-  month      Month           @relation(fields: [monthId], references: [id])
-  monthId    Int
-  createdAt  DateTime        @default(now())
+  id          Int             @id @default(autoincrement())
+  categoryId  Int
+  category    ExpenseCategory @relation(fields: [categoryId], references: [id])
+  amount      Float
+  date        DateTime        @default(now()) // Start of the week for this expense
+  description String
+  createdAt   DateTime        @default(now())
 }
 
 model ExpenseCategory {
@@ -52,14 +51,13 @@ model ExpenseCategory {
 }
 
 model Sale {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   type      String // e.g., "cash", "card", "transfer", "current account"
   amount    Float
+  date      DateTime?
   clientId  Int? // Optional; null for regular sales
-  client    Client?  @relation(fields: [clientId], references: [id])
-  month     Month    @relation(fields: [monthId], references: [id])
-  monthId   Int
-  createdAt DateTime @default(now())
+  client    Client?   @relation(fields: [clientId], references: [id])
+  createdAt DateTime  @default(now())
 }
 
 model Client {
@@ -76,8 +74,6 @@ model Stock {
   type      StockType @relation(fields: [typeId], references: [id])
   quantity  Float
   costValue Float
-  month     Month     @relation(fields: [monthId], references: [id])
-  monthId   Int
   createdAt DateTime  @default(now())
 }
 
@@ -85,13 +81,4 @@ model StockType {
   id     Int     @id @default(autoincrement())
   name   String  @unique // e.g., "beef", "pork", "chicken"
   stocks Stock[]
-}
-
-model Month {
-  id        Int       @id @default(autoincrement())
-  startDate DateTime  @unique() // The first date of the month
-  expenses  Expense[]
-  sales     Sale[]
-  stocks    Stock[]
-  createdAt DateTime  @default(now())
 }

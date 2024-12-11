@@ -69,31 +69,19 @@ function createStockType(name: StockType): { name: string } {
   return { name };
 }
 
-function createExpense(
-  categoryId: number,
-  monthId: number,
-): {
-  categoryId: number;
-  amount: number;
-  weekStart: Date;
-  monthId: number;
-} {
+function createExpense(categoryId: number) {
   return {
     categoryId,
     amount: faker.number.float({ min: 100, max: 1000 }),
-    weekStart: getNextMonday(faker.date.soon()),
-    monthId,
+    date: faker.date.soon({ days: 40 }),
+    description: faker.company.name(),
   };
 }
 
-function createSale(
-  monthId: number,
-  clientId: number | null = null,
-): {
+function createSale(clientId: number | null = null): {
   type: string;
   amount: number;
   clientId: number | null;
-  monthId: number;
 } {
   return {
     type: faker.helpers.arrayElement([
@@ -104,7 +92,6 @@ function createSale(
     ]),
     amount: faker.number.float({ min: 50, max: 1000 }),
     clientId,
-    monthId,
   };
 }
 
@@ -118,44 +105,16 @@ function createClient(): {
   };
 }
 
-function createStock(
-  typeId: number,
-  monthId: number,
-): {
+function createStock(typeId: number): {
   typeId: number;
   quantity: number;
   costValue: number;
-  monthId: number;
 } {
   return {
     typeId,
     quantity: faker.number.int({ min: 1, max: 500 }),
     costValue: faker.number.float({ min: 100, max: 10000 }),
-    monthId,
   };
-}
-
-function createMonth(date: Date): {
-  startDate: Date;
-} {
-  return {
-    startDate: getFirstDayOfMonth(date),
-  };
-}
-
-function getNextMonday(date: Date): Date {
-  const day = date.getDay();
-  const diff = day === 0 ? 1 : 8 - day;
-  const nextMonday = new Date(date);
-  nextMonday.setDate(date.getDate() + diff);
-  nextMonday.setHours(0, 0, 0, 0);
-  return nextMonday;
-}
-
-function getFirstDayOfMonth(date: Date): Date {
-  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-  firstDay.setHours(0, 0, 0, 0);
-  return firstDay;
 }
 
 async function seed(): Promise<void> {
@@ -194,22 +153,6 @@ async function seed(): Promise<void> {
   });
   console.timeEnd("👤 Seeded users...");
 
-  // Seed Months
-  console.time("📅 Seeded months...");
-  const currentMonth = new Date();
-  const lastMonth = new Date(currentMonth);
-  lastMonth.setMonth(currentMonth.getMonth() - 1);
-  const twoMonthsAgo = new Date(currentMonth);
-  twoMonthsAgo.setMonth(currentMonth.getMonth() - 2);
-  const months = await prisma.$transaction(
-    [
-      createMonth(twoMonthsAgo),
-      createMonth(lastMonth),
-      createMonth(currentMonth),
-    ].map((monthData) => prisma.month.create({ data: monthData })),
-  );
-  console.timeEnd("📅 Seeded months...");
-
   // Seed Expense Categories
   console.time("💸 Seeded expense categories...");
   const expenseCategories = await prisma.$transaction(
@@ -243,11 +186,9 @@ async function seed(): Promise<void> {
   console.time("💵 Seeded expenses...");
   await prisma.$transaction(
     expenseCategories.flatMap((category) =>
-      months.map((month) =>
-        prisma.expense.create({
-          data: createExpense(category.id, month.id),
-        }),
-      ),
+      prisma.expense.create({
+        data: createExpense(category.id),
+      }),
     ),
   );
   console.timeEnd("💵 Seeded expenses...");
@@ -255,10 +196,8 @@ async function seed(): Promise<void> {
   // Seed Sales
   console.time("🛒 Seeded sales...");
   await prisma.$transaction(
-    months.flatMap((month) =>
-      Array.from({ length: 5 }).map(() =>
-        prisma.sale.create({ data: createSale(month.id) }),
-      ),
+    Array.from({ length: 5 }).map(() =>
+      prisma.sale.create({ data: createSale() }),
     ),
   );
   console.timeEnd("🛒 Seeded sales...");
@@ -267,9 +206,7 @@ async function seed(): Promise<void> {
   console.time("🛒 Seeded client sales...");
   await prisma.$transaction(
     clients.flatMap((client) =>
-      months.map((month) =>
-        prisma.sale.create({ data: createSale(month.id, client.id) }),
-      ),
+      prisma.sale.create({ data: createSale(client.id) }),
     ),
   );
   console.timeEnd("🛒 Seeded client sales...");
@@ -278,11 +215,9 @@ async function seed(): Promise<void> {
   console.time("📦 Seeded stocks...");
   await prisma.$transaction(
     stockTypes.flatMap((type) =>
-      months.map((month) =>
-        prisma.stock.create({
-          data: createStock(type.id, month.id),
-        }),
-      ),
+      prisma.stock.create({
+        data: createStock(type.id),
+      }),
     ),
   );
   console.timeEnd("📦 Seeded stocks...");

@@ -16,19 +16,17 @@ import {
 } from "@headlessui/react";
 import {
   Bars3Icon,
-  CalendarIcon,
-  ChartPieIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
   HomeIcon,
   UsersIcon,
   XMarkIcon,
+  BanknotesIcon,
 } from "@heroicons/react/24/outline";
 import { useOptionalUser } from "~/utils/misc";
 
 const navigation = [
   { name: "Ventas", href: "/", icon: HomeIcon },
   { name: "Clientes", href: "/clients", icon: UsersIcon },
+  { name: "Expensas", href: "/expenses", icon: BanknotesIcon },
 ];
 
 function classNames(...classes: string[]) {
@@ -42,7 +40,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const SessionLink = user ? (
     <Form method="POST" action="/logout" className="ml-auto">
       <button className="bg-gray-200 text-black hover:bg-gray-100 px-2 py-1 rounded">
-        Sign out
+        Cerrar sesion
       </button>
     </Form>
   ) : (
@@ -50,7 +48,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       to="/login"
       className="bg-gray-200 text-black hover:bg-gray-100 px-2 py-1 rounded ml-auto"
     >
-      Sign in
+      Iniciar sesion
     </Link>
   );
   return (
@@ -94,7 +92,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                   </div>
                 </TransitionChild>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-800 px-6 pb-4 ring-1 ring-white/10">
                   <div className="flex h-16 shrink-0 items-center">
                     <img
                       alt="Your Company"
@@ -139,7 +137,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           {/* Static sidebar for desktop */}
           <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
             {/* Sidebar component, swap this element with another sidebar if you like */}
-            <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
+            <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-800 px-6 pb-4">
               <div className="flex h-16 shrink-0 items-center">
                 <img
                   alt="Your Company"

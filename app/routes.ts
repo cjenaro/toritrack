@@ -19,4 +19,5 @@ export default [
     route(":clientId/edit", "routes/client/edit.tsx"),
     route(":clientId/delete", "routes/client/delete.tsx"),
   ]),
+  ...prefix("expenses", [index("routes/expenses/home.tsx")]),
 ] satisfies RouteConfig;

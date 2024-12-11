@@ -16,9 +16,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
           type: true,
           id: true,
           amount: true,
-          month: {
-            select: { startDate: true },
-          },
+          date: true,
         },
       },
     },
@@ -107,10 +105,10 @@ export default function Client() {
               <td className="py-4 pl-0 pr-4 text-sm/6 sm:pr-8 lg:pr-20">
                 <div className="flex items-center justify-end gap-x-2 sm:justify-start">
                   <time
-                    dateTime={item.month.startDate.toUTCString()}
+                    dateTime={item.date?.toUTCString()}
                     className="text-gray-400"
                   >
-                    {item.month.startDate.toLocaleDateString("es-AR")}
+                    {item.date?.toLocaleDateString("es-AR")}
                   </time>
                 </div>
               </td>

@@ -21,7 +21,7 @@ export default function Clients() {
           to="new"
           className="bg-gray-100 text-black px-2 py-1 rounded hover:bg-gray-50 cursor-pointer"
         >
-          Add new client
+          Agregar
         </Link>
       </div>
       <ul className="divide-y divide-white/5" role="list">
