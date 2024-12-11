@@ -18,6 +18,8 @@
     "@conform-to/react": "^1.2.2",
     "@conform-to/zod": "^1.2.2",
     "@epic-web/remember": "^1.1.0",
+    "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^2.2.0",
     "@prisma/client": "^5.22.0",
     "@react-router/node": "^7.0.1",
     "@react-router/serve": "^7.0.1",

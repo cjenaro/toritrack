@@ -1,20 +1,10 @@
-import {
-  isRouteErrorResponse,
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  Form,
-  Link,
-} from "react-router";
+import { isRouteErrorResponse, Outlet } from "react-router";
 
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
 import { LoaderFunctionArgs } from "react-router";
 import { getUserId } from "./utils/auth.server";
-import { useOptionalUser } from "./utils/misc";
-import { useLocation } from "react-router";
+import Layout from "~/components/layout";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -34,42 +24,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { user: await getUserId(request) };
 }
 
-export function Layout({ children }: { children: React.ReactNode }) {
-  const user = useOptionalUser();
-  const location = useLocation();
-  return (
-    <html lang="en" className="h-full bg-gray-900">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body className="h-full bg-gray-900 text-white">
-        <header className="px-4 md:px-12 py-8 flex justify-center md:justify-end gap-4 items-center">
-          {user ? (
-            <Form method="POST" action="/logout">
-              <button className="bg-gray-200 text-black hover:bg-gray-100 px-2 md:px-4 py-2 rounded">
-                Sign out
-              </button>
-            </Form>
-          ) : (
-            <Link
-              to="/login"
-              className="bg-gray-200 text-black hover:bg-gray-100 px-4 py-2 rounded"
-            >
-              Sign in
-            </Link>
-          )}
-          <Link to="/dashboard">Dashboard</Link>
-        </header>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
+export { Layout };
 
 export default function App() {
   return <Outlet />;
