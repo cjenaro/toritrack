@@ -3,6 +3,7 @@ import type { Route } from "./+types/client";
 import { requireUserId } from "~/utils/auth.server";
 import { Link, useLoaderData } from "react-router";
 import { redirectBack } from "remix-utils/redirect-back";
+import DoubleCheck from "~/components/double-check";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   await requireUserId(request);
@@ -37,12 +38,29 @@ export default function Client() {
     <div>
       <div className="flex justify-between gap-4">
         <h1>{client.name}</h1>
-        <Link
-          to="edit"
-          className="bg-gray-100 hover:bg-gray-50 rounded px-2 py-1 text-black"
-        >
-          Editar
-        </Link>
+        <div className="flex gap-4">
+          <Link
+            to="edit"
+            className="bg-gray-100 hover:bg-gray-50 rounded px-2 py-1 text-black"
+          >
+            Editar
+          </Link>
+          <DoubleCheck
+            title="Seguro?"
+            description="Si borras este cliente no hay vuelta atrás"
+            submitBtn="Borrar"
+            method="POST"
+            action={`/clients/${client.id}/delete`}
+            Trigger={({ setOpen }) => (
+              <button
+                onClick={() => setOpen(true)}
+                className="bg-red-700 hover:bg-red-500 rounded px-2 py-1 text-white"
+              >
+                Borrar
+              </button>
+            )}
+          />
+        </div>
       </div>
       <table className="mt-6 w-full whitespace-nowrap text-left">
         <colgroup>

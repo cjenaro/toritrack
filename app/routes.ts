@@ -17,5 +17,6 @@ export default [
     route("new", "routes/client/new.tsx"),
     route(":clientId", "routes/client/client.tsx"),
     route(":clientId/edit", "routes/client/edit.tsx"),
+    route(":clientId/delete", "routes/client/delete.tsx"),
   ]),
 ] satisfies RouteConfig;

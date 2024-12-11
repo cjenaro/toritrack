@@ -11,7 +11,7 @@ import { z } from "zod";
 import { useIsPending } from "~/utils/misc";
 import { requireUserId } from "~/utils/auth.server";
 import { prisma } from "~/utils/db.server";
-import type { Route } from "./+types/client";
+import type { Route } from "./+types/edit";
 import { redirectBack } from "remix-utils/redirect-back";
 
 const ClientSchema = z.object({
