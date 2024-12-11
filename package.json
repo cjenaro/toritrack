@@ -9,7 +9,8 @@
     "start": "react-router-serve ./build/server/index.js",
     "seed": "npx prisma db seed",
     "deploy": "npx prisma migrate deploy",
-    "typecheck": "react-router typegen && tsc --build --noEmit"
+    "typecheck": "react-router typegen && tsc --build --noEmit",
+    "format": "npx prettier . --write"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

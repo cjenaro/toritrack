@@ -6,6 +6,7 @@ import {
   ScrollRestoration,
   Form,
   Link,
+  NavLink,
 } from "react-router";
 import {
   Dialog,
@@ -26,21 +27,8 @@ import {
 import { useOptionalUser } from "~/utils/misc";
 
 const navigation = [
-  { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "Team", href: "#", icon: UsersIcon, current: false },
-  { name: "Projects", href: "#", icon: FolderIcon, current: false },
-  { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-  { name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
-  { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
-];
-const teams = [
-  { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
-  { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
-  { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
-];
-const userNavigation = [
-  { name: "Your profile", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Ventas", href: "/", icon: HomeIcon },
+  { name: "Clientes", href: "/clients", icon: UsersIcon },
 ];
 
 function classNames(...classes: string[]) {
@@ -120,21 +108,23 @@ export default function Layout({ children }: { children: ReactNode }) {
                         <ul role="list" className="-mx-2 space-y-1">
                           {navigation.map((item) => (
                             <li key={item.name}>
-                              <a
-                                href={item.href}
-                                className={classNames(
-                                  item.current
-                                    ? "bg-gray-800 text-white"
-                                    : "text-gray-400 hover:bg-gray-800 hover:text-white",
-                                  "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
-                                )}
+                              <NavLink
+                                to={item.href}
+                                className={({ isActive }) =>
+                                  classNames(
+                                    isActive
+                                      ? "bg-gray-800 text-white"
+                                      : "text-gray-400 hover:bg-gray-800 hover:text-white",
+                                    "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
+                                  )
+                                }
                               >
                                 <item.icon
                                   aria-hidden="true"
                                   className="size-6 shrink-0"
                                 />
                                 {item.name}
-                              </a>
+                              </NavLink>
                             </li>
                           ))}
                         </ul>
@@ -163,21 +153,23 @@ export default function Layout({ children }: { children: ReactNode }) {
                     <ul role="list" className="-mx-2 space-y-1">
                       {navigation.map((item) => (
                         <li key={item.name}>
-                          <a
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? "bg-gray-800 text-white"
-                                : "text-gray-400 hover:bg-gray-800 hover:text-white",
-                              "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
-                            )}
+                          <NavLink
+                            to={item.href}
+                            className={({ isActive }) =>
+                              classNames(
+                                isActive
+                                  ? "bg-gray-800 text-white"
+                                  : "text-gray-400 hover:bg-gray-800 hover:text-white",
+                                "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
+                              )
+                            }
                           >
                             <item.icon
                               aria-hidden="true"
                               className="size-6 shrink-0"
                             />
                             {item.name}
-                          </a>
+                          </NavLink>
                         </li>
                       ))}
                     </ul>
