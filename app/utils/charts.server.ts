@@ -71,3 +71,29 @@ export function calculateLastMonthlyTrend(
 
   return percentageChange;
 }
+
+const readablePaymentMethods = {
+  account_money: "Dinero en cuenta",
+  cvu: "Transferencia",
+} as const;
+
+export function prepareRevenueByPaymentMethod(
+  incomingPayments: PaymentSearchResult[],
+) {
+  // Group by payment method
+  const revenueByMethod = incomingPayments.reduce<Record<string, number>>(
+    (acc, payment) => {
+      const method =
+        readablePaymentMethods[payment?.payment_method_id || "cvu"];
+      if (method)
+        acc[method] = (acc[method] || 0) + (payment?.transaction_amount || 0);
+      return acc;
+    },
+    {},
+  );
+
+  return Object.entries(revenueByMethod).map(([method, amount]) => ({
+    method,
+    amount,
+  }));
+}
