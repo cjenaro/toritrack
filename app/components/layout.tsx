@@ -22,6 +22,7 @@ import {
   BanknotesIcon,
 } from "@heroicons/react/24/outline";
 import { useOptionalUser } from "~/utils/misc";
+import { Button } from "~/components/ui/button";
 
 const navigation = [
   { name: "Ventas", href: "/", icon: HomeIcon },
@@ -39,16 +40,11 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   const SessionLink = user ? (
     <Form method="POST" action="/logout" className="ml-auto">
-      <button className="bg-gray-200 text-black hover:bg-gray-100 px-2 py-1 rounded">
-        Cerrar sesion
-      </button>
+      <Button>Cerrar sesion</Button>
     </Form>
   ) : (
-    <Link
-      to="/login"
-      className="bg-gray-200 text-black hover:bg-gray-100 px-2 py-1 rounded ml-auto"
-    >
-      Iniciar sesion
+    <Link to="/login" className="ml-auto">
+      <Button>Iniciar sesion</Button>
     </Link>
   );
   return (
@@ -178,7 +174,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
 
           <div className="lg:pl-72">
-            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200/20  px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+            <div className="flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200/20  px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
               <button
                 type="button"
                 onClick={() => setSidebarOpen(true)}

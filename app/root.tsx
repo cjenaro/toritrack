@@ -61,10 +61,10 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Not-so-epic Web Starter" },
+    { title: "Carniceria El Tori" },
     {
       name: "description",
-      content: "An opinionated starter that is not so epic",
+      content: "Mejor control de nuestro gastos y ganancias",
     },
   ];
 }

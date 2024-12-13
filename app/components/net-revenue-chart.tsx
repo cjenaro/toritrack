@@ -43,7 +43,7 @@ export default function NetRevenueChart({
   chartData: any;
 }) {
   return (
-    <Card>
+    <Card className="xl:col-span-2">
       <CardHeader>
         <CardTitle>Tendencia de Ingresos Netos</CardTitle>
       </CardHeader>
