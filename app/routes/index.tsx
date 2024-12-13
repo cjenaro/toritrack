@@ -1,4 +1,4 @@
-import { useLoaderData, useFetcher, Form } from "react-router";
+import { useLoaderData, Form } from "react-router";
 import { mp } from "~/utils/mercadopago.server";
 import { Payment, User } from "mercadopago";
 import { requireUserId } from "~/utils/auth.server";
@@ -21,10 +21,12 @@ import { formatDistance } from "date-fns";
 import {
   calculateLastMonthlyTrend,
   combineIntoChartData,
+  preparePaidToAccounts,
   prepareRevenueByPaymentMethod,
 } from "~/utils/charts.server";
 import PaymentMethodsChart from "~/components/bar-chart";
 import NetRevenueChart from "~/components/net-revenue-chart";
+import PaidToChart from "~/components/paid-to-chart";
 
 export async function loader({ request }: Route.LoaderArgs) {
   await requireUserId(request);
@@ -73,11 +75,13 @@ export async function loader({ request }: Route.LoaderArgs) {
   );
 
   const barChartData = prepareRevenueByPaymentMethod(incomingPayments.results);
+  const paidToChartDate = preparePaidToAccounts(outgoingPayments.results);
 
   return {
     percentageChange: calculateLastMonthlyTrend(chartData),
     chartData,
     barChartData,
+    paidToChartDate,
     from,
     to,
   };
@@ -90,11 +94,19 @@ function getFormattedDistance(date?: DateRange) {
 }
 
 export default function Homepage() {
-  const { error, chartData, percentageChange, from, to, barChartData } =
-    useLoaderData<typeof loader>();
+  const {
+    error,
+    paidToChartDate,
+    chartData,
+    percentageChange,
+    from,
+    to,
+    barChartData,
+  } = useLoaderData<typeof loader>();
   const [date, setDate] = useState<DateRange | undefined>({ from, to });
 
   if (error) {
+    /* TODO: nice error showing */
     return (
       <div>
         <h1>{error}</h1>
@@ -138,6 +150,7 @@ export default function Homepage() {
               percentageChange={percentageChange}
             />
             <PaymentMethodsChart chartData={barChartData} />
+            <PaidToChart chartData={paidToChartDate} />
           </CardContent>
         </Card>
       </div>

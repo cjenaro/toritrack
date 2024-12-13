@@ -14,6 +14,7 @@ import {
 } from "./ui/chart";
 import { DateRange } from "react-day-picker";
 import { differenceInMonths } from "date-fns";
+import { TrendingDown, TrendingUp } from "lucide-react";
 
 const chartConfig = {
   incoming: {
@@ -29,7 +30,7 @@ const chartConfig = {
 function datesAreAtLeastTwoMonths(date?: DateRange) {
   if (!date || !date.from || !date.to) return false;
 
-  return differenceInMonths(date.from, date.to) >= 2;
+  return Math.abs(differenceInMonths(date.from, date.to)) >= 2;
 }
 
 export default function NetRevenueChart({

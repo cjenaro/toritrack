@@ -83,8 +83,9 @@ export function prepareRevenueByPaymentMethod(
   // Group by payment method
   const revenueByMethod = incomingPayments.reduce<Record<string, number>>(
     (acc, payment) => {
-      const method =
-        readablePaymentMethods[payment?.payment_method_id || "cvu"];
+      if (!payment.payment_method_id) return acc;
+
+      const method = readablePaymentMethods[payment.payment_method_id];
       if (method)
         acc[method] = (acc[method] || 0) + (payment?.transaction_amount || 0);
       return acc;
@@ -95,5 +96,37 @@ export function prepareRevenueByPaymentMethod(
   return Object.entries(revenueByMethod).map(([method, amount]) => ({
     method,
     amount,
+  }));
+}
+
+export function preparePaidToAccounts(outgoingPayments: PaymentSearchResult[]) {
+  const groupedPayments = outgoingPayments.reduce(
+    (acc, payment) => {
+      const {
+        /* @ts-expect-error */
+        collector,
+        transaction_amount = 0,
+        description = "",
+      } = payment;
+      const collector_id = collector?.id;
+      if (!collector_id) return acc;
+
+      if (!acc[collector_id]) {
+        // Initialize the group with the first description and amount
+        acc[collector_id] = { amount: 0, description };
+      }
+
+      // Accumulate the amount
+      acc[collector_id].amount += transaction_amount;
+
+      return acc;
+    },
+    {} as Record<string, { amount: number; description: string }>,
+  );
+
+  return Object.entries(groupedPayments).map(([id, data]) => ({
+    id,
+    amount: data.amount,
+    description: data.description,
   }));
 }

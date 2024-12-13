@@ -1,4 +1,4 @@
-import { BarChart, CartesianGrid, XAxis, Bar } from "recharts";
+import { BarChart, CartesianGrid, XAxis, YAxis, Bar } from "recharts";
 import {
   Card,
   CardContent,
@@ -28,26 +28,29 @@ export default function PaymentMethodsChart({ chartData }: { chartData: any }) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
+          <BarChart accessibilityLayer data={chartData} layout="vertical">
+            <CartesianGrid horizontal={false} />
+            <XAxis type="number" hide />
+            <YAxis
               dataKey="method"
+              type="category"
               tickLine={false}
-              tickMargin={10}
               axisLine={false}
+              width={100}
+              hide
             />
             <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
+              cursor={{ fill: "rgba(0, 0, 0, 0.1)" }}
+              content={
+                <ChartTooltipContent
+                  indicator="dashed"
+                  formatter={(value, _name, item) =>
+                    `${item.payload.method} $${value.toLocaleString("es-AR")}`
+                  }
+                />
+              }
             />
-            <Bar dataKey="amount" fill="var(--color-desktop)" radius={4} />
+            <Bar dataKey="amount" fill="var(--color-amount)" radius={4} />
           </BarChart>
         </ChartContainer>
       </CardContent>
